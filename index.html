@@ -1,0 +1,77 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no" />
+  <title>WebAR - NFT Marker</title>
+  
+  <script src="https://aframe.io/releases/1.0.4/aframe.min.js"></script>
+  <script src="https://raw.githack.com/AR-js-org/AR.js/3.3.2/aframe/build/aframe-ar-nft.js"></script>
+  <script src="https://cdn.jsdelivr.net/gh/mayognaise/aframe-gif-shader@master/dist/aframe-gif-shader.min.js"></script>
+
+  <style>
+    .arjs-loader {
+      height: 100%;
+      width: 100%;
+      position: absolute;
+      top: 0;
+      left: 0;
+      background-color: rgba(0, 0, 0, 0.8);
+      z-index: 9999;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      color: white;
+      font-family: sans-serif;
+    }
+  </style>
+</head>
+
+<body style="margin: 0px; overflow: hidden;">
+  <div class="arjs-loader" id="loader">
+    <div>Loading, please wait...</div>
+  </div>
+
+  <a-scene
+    vr-mode-ui="enabled: false;"
+    renderer="logarithmicDepthBuffer: true;"
+    embedded
+    arjs="trackingMethod: best; sourceType: webcam; debugUIEnabled: false;">
+
+    <a-assets>
+      <img id="utubo-gif" src="utsubo-no-bg.gif" />
+    </a-assets>
+
+    <!-- NFTマーカー -->
+    <a-nft
+      type="nft"
+      url="./marker"
+      smooth="true"
+      smoothCount="10"
+      smoothTolerance=".01"
+      smoothThreshold="5">
+
+      <!-- ウツボのGIF画像（scaleを 300 300 1 に大幅拡大） -->
+      <a-plane material="shader: gif; src: #utubo-gif; transparent: true; alphaTest: 0.5; side: double;"
+        position="150 0 -100" rotation="-90 0 0" scale="300 300 1"></a-plane>
+
+    </a-nft>
+
+    <a-entity camera></a-entity>
+  </a-scene>
+
+  <script>
+    // ローディング消去処理
+    window.addEventListener('arjs-nft-loaded', function () {
+      var loader = document.getElementById('loader');
+      if (loader) loader.style.display = 'none';
+    });
+    setTimeout(function() {
+      var loader = document.getElementById('loader');
+      if (loader && loader.style.display !== 'none') loader.style.display = 'none';
+    }, 5000);
+  </script>
+</body>
+
+</html>
